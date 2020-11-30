@@ -24,10 +24,12 @@ jobs:
           - name: linux-autotools
             os: ubuntu-latest
             build-system: autotools
+            configure-options: --enable-sndfile --enable-alsa
 
           - name: windows-cmake
             os: windows-latest
             build-system: cmake
+            configure-options: -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -51,17 +53,17 @@ jobs:
     - name: Configure CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.configure-options}}
 
     - name: Build CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build . --config ${{env.BUILD_TYPE}}
 
     - name: Test CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: ctest -C $BUILD_TYPE
+      run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Bootstrap Autotools
       if: startsWith(matrix.build-system,'autotools')
@@ -69,7 +71,7 @@ jobs:
 
     - name: Configure Autotools
       if: startsWith(matrix.build-system,'autotools')
-      run: ./configure --enable-sndfile --enable-alsa
+      run: ./configure ${{matrix.configure-options}}
 
     - name: Build Autotools
       if: startsWith(matrix.build-system,'autotools')
