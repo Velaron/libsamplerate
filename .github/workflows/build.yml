@@ -50,14 +50,12 @@ jobs:
 
     - name: Configure CMake
       if: startsWith(matrix.build-system,'cmake')
-      shell: bash
       working-directory: ${{runner.workspace}}/build
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Test CMake
@@ -67,20 +65,16 @@ jobs:
 
     - name: Bootstrap Autotools
       if: startsWith(matrix.build-system,'autotools')
-      shell: bash
       run: ./autogen.sh
 
     - name: Configure Autotools
       if: startsWith(matrix.build-system,'autotools')
-      shell: bash
       run: ./configure --enable-sndfile --enable-alsa
 
     - name: Build Autotools
       if: startsWith(matrix.build-system,'autotools')
-      shell: bash
       run: make
 
     - name: Test Autotools
       if: startsWith(matrix.build-system,'autotools')
-      shell: bash
       run: make distcheck
