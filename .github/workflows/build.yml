@@ -12,12 +12,17 @@ jobs:
       fail-fast: false
       matrix:
         name: [
-        ubuntu-cmake
+        linux-cmake,
+        linux-autotools
         ]
         include:
-          - name: ubuntu-cmake
+          - name: linux-cmake
             os: ubuntu-latest
             build-system: cmake
+
+          - name: linux-autotools
+            os: ubuntu-latest
+            build-system: autotools
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,3 +54,23 @@ jobs:
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
       run: ctest -C $BUILD_TYPE
+
+    - name: Bootstrap Autotools
+      if: startsWith(matrix.build-system,'autotools')
+      shell: bash
+      run: ./autogen.sh
+
+    - name: Configure Autotools
+      if: startsWith(matrix.build-system,'autotools')
+      shell: bash
+      run: ./configure --enable-sndfile --enable-alsa
+
+    - name: Build Autotools
+      if: startsWith(matrix.build-system,'autotools')
+      shell: bash
+      run: make
+
+    - name: Test Autotools
+      if: startsWith(matrix.build-system,'autotools')
+      shell: bash
+      run: make distcheck
