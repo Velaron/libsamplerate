@@ -43,7 +43,7 @@ ltmain.sh
 missing
 samplerate.pc
 src/Version_script
-src/config.h
+!src/config.h
 src/config.h.in
 stamp-h1
 tests/*_test
