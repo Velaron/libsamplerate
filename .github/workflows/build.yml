@@ -50,7 +50,7 @@ jobs:
 
     - name: Install macOS dependencies
       if: startsWith(matrix.os,'macos')
-      run: brew install fftw
+      run: brew install automake fftw
 
     - name: Install Windows dependencies
       if: startsWith(matrix.os,'windows')
