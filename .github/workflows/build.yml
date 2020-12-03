@@ -44,7 +44,7 @@ jobs:
     - name: Install Windows dependencies
       if: startsWith(matrix.os,'windows')
       run: |
-        vcpkg install libsndfile opus fftw3
+        vcpkg install libsndfile:x64-windows opus:x64-windows fftw3:x64-windows
 
     - name: Create CMake Build Environment
       if: startsWith(matrix.build-system,'cmake')
