@@ -2,10 +2,6 @@ name: Build & test
 
 on: [push]
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 jobs:
   build:
     strategy:
@@ -68,17 +64,17 @@ jobs:
     - name: Configure CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.configure-options}}
+      run: cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=Release ${{matrix.configure-options}}
 
     - name: Build CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: cmake --build . --config ${{env.BUILD_TYPE}}
+      run: cmake --build . --config Release
 
     - name: Test CMake
       if: startsWith(matrix.build-system,'cmake')
       working-directory: ${{runner.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C Release
 
     - name: Bootstrap Autotools
       if: startsWith(matrix.build-system,'autotools')
